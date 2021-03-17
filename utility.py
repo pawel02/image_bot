@@ -41,7 +41,7 @@ class message_handler:
         box.send_keys(self.keywords)
         box.send_keys(Keys.ENTER)
 
-        images = self.driver.find_elements_by_css_selector("img")
+        images = self.driver.find_elements_by_css_selector(".rg_i")
         srcs = []
         for image in images:
             srcs.append(image.get_property("src"))

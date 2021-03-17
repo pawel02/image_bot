@@ -15,7 +15,7 @@ async def on_ready():
     
     handler.update_channel_list(text_channel_list)
 
-    #await handler.write_to_all_channels('Bought to you by Jonny sins. An engineer, a doctor, a real life astrounaut and a father to us all. https://img.mensxp.com/media/content/2019/Sep/johnny-sins-trolls-former-pakistan-envoy-abdul-basit1200-1567585868_1200x900.jpg')
+    await handler.write_to_all_channels('Bought to you by Jonny sins. An engineer, a doctor, a real life astrounaut and a father to us all. https://img.mensxp.com/media/content/2019/Sep/johnny-sins-trolls-former-pakistan-envoy-abdul-basit1200-1567585868_1200x900.jpg')
 
     #write a list of commands
     await handler.help()
