@@ -28,5 +28,7 @@ async def on_message(message):
     await handler.handle_message(message.content)
 
 
-
-client.run("ODIxNzIyMjM3ODYyMTUwMTc1.YFH2eA.sRkidvG8NT4LQ5Po2rqSXp5klmM")
+token = ""
+with open("token.txt") as file:
+    token = file.read()
+client.run(token)
