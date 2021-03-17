@@ -1,0 +1,7 @@
+__pycache__
+chromedriver.exe
+
+*.jpg
+*.jpeg
+*.png
+*.gif
