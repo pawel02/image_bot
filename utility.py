@@ -15,7 +15,7 @@ class message_handler:
         self.keywords = "Spongebob"
 
         # initialize selenium
-        self.driver = driver = webdriver.Chrome('E:\pawel\coding(learning)\discord\chromedriver.exe')
+        self.driver = webdriver.Chrome('E:\pawel\coding(learning)\discord\chromedriver.exe')
         self.driver.get('https://www.google.ca/imghp?hl=en&tab=ri&authuser=0&ogbl')
 
         #first dummy search as the xpath is different afterwards
@@ -23,23 +23,18 @@ class message_handler:
         box.send_keys(self.keywords)
         box.send_keys(Keys.ENTER)
 
-
+        self.help_message = """Here is a list of available commands:
+/help - displays all the available commands
+/search <keywords> - will change the search to the keyword
+/get - will get the image based on the current search
+/clear amount - will delete the past messages with the amount specified
+"""
 
     async def help(self, channel):
-        await channel.send("""Here is a list of available commands:
-/help - displays all the available commands
-/search <keywords> - will change the search to the keyword
-/get - will get the image based on the current search
-/clear amount - will delete the past messages with the amount specified
-""")
+        await channel.send(self.help_message)
 
     async def help(self):
-        await self.write_to_all_channels("""Here is a list of available commands:
-/help - displays all the available commands
-/search <keywords> - will change the search to the keyword
-/get - will get the image based on the current search
-/clear amount - will delete the past messages with the amount specified
-""")
+        await self.write_to_all_channels(self.help_message)
 
     def update_channel_list(self, new_channels):
         self.channels = new_channels
@@ -79,6 +74,9 @@ class message_handler:
             await self.get_image(channel)
 
     async def clear(self, amount, channel):
+        #make sure that the amount is valid
+        if amount < 1:
+            amount = 5
         await channel.purge(limit=amount)
 
     async def handle_message(self, msg, channel):
