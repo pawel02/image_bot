@@ -5,17 +5,14 @@ import discord
 import random
 import base64
 
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import time 
-#no safe search
 
 class message_handler:
     def __init__(self, client, channels):
         self.client = client
         self.channels = channels
-        self.keywords = "Elizabeth Olsen"
+        self.keywords = "Spongebob"
 
         # initialize selenium
         self.driver = driver = webdriver.Chrome('E:\pawel\coding(learning)\discord\chromedriver.exe')

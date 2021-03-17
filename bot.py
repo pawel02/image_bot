@@ -1,5 +1,5 @@
 import discord
-from elizabeth_handler import message_handler
+from utility import message_handler
 
 client = discord.Client()
 text_channel_list = []
@@ -29,4 +29,4 @@ async def on_message(message):
 
 
 
-client.run("ODIxNDI4MjYwNDA2Njg5ODgz.YFDkrg.ArInSoijofFcFR9CXXKZ7g8SJlQ")
+client.run("ODIxNzIyMjM3ODYyMTUwMTc1.YFH2eA.sRkidvG8NT4LQ5Po2rqSXp5klmM")
