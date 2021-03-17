@@ -25,17 +25,26 @@ class message_handler:
 
 
 
+    async def help(self, channel):
+        await channel.send("""Here is a list of available commands:
+/help - displays all the available commands
+/search <keywords> - will change the search to the keyword
+/get - will get the image based on the current search
+/clear amount - will delete the past messages with the amount specified
+""")
+
     async def help(self):
         await self.write_to_all_channels("""Here is a list of available commands:
 /help - displays all the available commands
 /search <keywords> - will change the search to the keyword
 /get - will get the image based on the current search
+/clear amount - will delete the past messages with the amount specified
 """)
 
     def update_channel_list(self, new_channels):
         self.channels = new_channels
 
-    async def get_image(self):
+    async def get_image(self, channel):
         box = self.driver.find_element_by_xpath('//*[@id="REsRA"]')
         box.clear()
         box.send_keys(self.keywords)
@@ -63,20 +72,30 @@ class message_handler:
                 file.write(img_data)
 
             picture = discord.File(img_name)
-            await self.write_to_all_file(picture)              
+            await channel.send(file=picture)              
         elif len(img) != 0:
-            await self.write_to_all_channels(img)
+            await channel.send(img)
         else:
-            await self.get_image()
+            await self.get_image(channel)
 
-    async def handle_message(self, msg):
+    async def clear(self, amount, channel):
+        await channel.purge(limit=amount)
+
+    async def handle_message(self, msg, channel):
         #figure out whether its a valid command
         if msg.startswith("/search"):
             self.keywords = msg[8:]
         if msg.startswith("/get"):
-           await self.get_image()
+           await self.get_image(channel)
         if msg.startswith("/help"):
-            await self.help()
+            await self.help(channel)
+        if msg.startswith("/clear"):
+            try:
+                amount = int(msg[6:])
+                await self.clear(amount, channel)    
+            except Exception:
+                await self.clear(5, channel)
+
 
 
     async def write_to_all_file(self, f):

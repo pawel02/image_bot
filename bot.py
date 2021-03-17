@@ -25,8 +25,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    await handler.handle_message(message.content)
-
+    await handler.handle_message(message.content, message.channel)
 
 token = ""
 with open("token.txt") as file:
