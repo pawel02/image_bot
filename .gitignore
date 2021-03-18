@@ -1,6 +1,7 @@
 __pycache__
 .vscode
 chromedriver.exe
+ffmpeg.exe
 
 token.txt
 

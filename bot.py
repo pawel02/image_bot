@@ -1,5 +1,8 @@
 import discord
 from utility import message_handler
+from discord.utils import get
+
+from youtube_dl import YoutubeDL
 
 client = discord.Client()
 
@@ -30,6 +33,27 @@ async def on_message(message):
 
     await handler.handle_message(message.content, message.channel, message.author.voice.channel)
 
+@client.event
+async def on_voice_state_update(member, before, after):
+    if member == client.user:
+        return
+
+    FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+    YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
+    with YoutubeDL(YDL_OPTIONS) as ydl:
+        info = ydl.extract_info("https://www.youtube.com/watch?v=ZiJYyPAzkQM&ab_channel=MrWolf", download=False)
+    m_url = info['formats'][0]['url']
+    
+    voice = get(client.voice_clients, guild=before.channel.guild)
+    if voice:
+        await voice.move_to(before.channel)
+    else:
+        voice = await before.channel.connect()
+
+    if voice.is_playing():
+        voice.stop()
+    voice.play(discord.FFmpegPCMAudio(m_url, **FFMPEG_OPTIONS), after = lambda e: handler.play_music())
+    
 token = ""
 with open("token.txt") as file:
     token = file.read()
