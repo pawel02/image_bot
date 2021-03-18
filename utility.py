@@ -31,6 +31,9 @@ class message_handler:
 /search <keywords> - will change the search to the keyword
 /get - will get the image based on the current search
 /clear amount - will delete the past messages with the amount specified
+/play title - plays the video from youtube
+/skip - skips the current played song
+/q - shows all of the videos in queue
 """
         self.srcs = []
 
@@ -105,7 +108,7 @@ class message_handler:
             self.is_playing = True
 
             with YoutubeDL(self.YDL_OPTIONS) as ydl:
-                info = ydl.extract_info(self.music_queue[0][0], download=False)
+                info = ydl.extract_info(self.music_queue[0][0]['source'], download=False)
             m_url = info['formats'][0]['url']
 
             #remove the first element as you are currently playing it
@@ -121,7 +124,7 @@ class message_handler:
             self.is_playing = True
 
             with YoutubeDL(self.YDL_OPTIONS) as ydl:
-                info = ydl.extract_info(self.music_queue[0][0], download=False)
+                info = ydl.extract_info(self.music_queue[0][0]['source'], download=False)
             m_url = info['formats'][0]['url']
 
             try: self.vc = await self.music_queue[0][1].connect()
@@ -157,9 +160,26 @@ class message_handler:
             else:
                 await channel.send("Song added to the queue")
                 song = self.search_yt(msg[6:])
-                self.music_queue.append([song['source'], voice_channel])
+                self.music_queue.append([song, voice_channel])
                 if self.is_playing == False:
                     await self.play_music()
+
+        if msg.startswith("/skip"):
+            try:
+                self.vc.stop()
+                await self.play_music()
+            except Exception: pass
+
+        if msg.startswith("/q"):
+            retval = ""
+            for i in range(0, len(self.music_queue)):
+                retval += self.music_queue[i][0]['title'] + "\n"
+
+            if retval != "":
+                await channel.send(retval)
+            else:
+                await channel.send("No music in queue")
+
 
     async def write_to_all_file(self, f):
         for channel in self.channels:
