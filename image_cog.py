@@ -26,19 +26,6 @@ class image_cog(commands.Cog):
         #get the latest in the folder
         self.update_images()
 
-    #some debug info so that we know the bot has started    
-    @commands.Cog.listener()
-    async def on_ready(self):
-        for guild in self.bot.guilds:
-            for channel in guild.text_channels:
-                self.text_channel_list.append(channel)
-
-        await self.send_to_all(self.help_message)        
-
-    @commands.command()
-    async def help(self, ctx):
-        await ctx.send(self.help_message)
-
 
     @commands.command()
     async def get(self, ctx):
@@ -60,7 +47,7 @@ class image_cog(commands.Cog):
         #store all the names to the files
         for filename in os.listdir(self.download_folder):
             self.image_names.append(os.path.join(self.download_folder, filename))
-            
+
     @commands.command()
     async def search(self, ctx, *args):
         self.clear_folder()

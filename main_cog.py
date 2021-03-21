@@ -1,10 +1,10 @@
 import discord
-from discord.commands import commands
+from discord.ext import commands
 
 
-class main_bot(commands.Cog):
+class main_cog(commands.Cog):
     def __init__(self, bot):
-
+        self.bot = bot
         self.help_message = """
 ```
 General commands:
@@ -14,6 +14,11 @@ General commands:
 Image commands:
 /search <keywords> - will change the search to the keyword
 /get - will get the image based on the current search
+
+Music commands:
+/p <keywords> - finds the song on youtube and plays it in your current channel
+/q - displays the current music queue
+/skip - skips the current song being played
 ```
 """
         self.text_channel_list = []
