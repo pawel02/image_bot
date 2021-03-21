@@ -7,9 +7,9 @@ import base64
 
 from youtube_dl import YoutubeDL
 import requests
+import os, shutil
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from google_images_download import google_images_download
 
 class message_handler:
     def __init__(self, client, channels):
@@ -17,25 +17,24 @@ class message_handler:
         self.channels = channels
         self.keywords = "Spongebob"
 
-        # initialize selenium
-        self.driver = webdriver.Chrome('E:\pawel\coding(learning)\discord\chromedriver.exe')
-        self.driver.get('https://www.google.ca/imghp?hl=en&tab=ri&authuser=0&ogbl')
+        self.response = google_images_download.googleimagesdownload()
+        self.arguments = {
+            "keywords": self.keywords, 
+            "limit":20,
+            "size":"medium"
+            }
 
-        #first dummy search as the xpath is different afterwards
-        box = self.driver.find_element_by_xpath('//*[@id="sbtc"]/div/div[2]/input')
-        box.send_keys(self.keywords)
-        box.send_keys(Keys.ENTER)
+        self.image_names = []
 
         self.help_message = """Here is a list of available commands:
 /help - displays all the available commands
-/search <keywords> - will change the search to the keyword
-/get - will get the image based on the current search
+/search <keywords> - will change the search to the keyword (REMOVED AS JOSH WAS BEING A DICK)
+/get - will get the image based on the current search (REMOVED AS JOSH WAS BEING A DICK)
 /clear amount - will delete the past messages with the amount specified
 /play title - plays the video from youtube
 /skip - skips the current played song
 /q - shows all of the videos in queue
 """
-        self.srcs = []
 
         #all the music related stuff
         self.is_playing = False
@@ -55,27 +54,8 @@ class message_handler:
 
     async def get_image(self, channel):
         #select a random image
-        img = self.srcs[random.randint(0, len(self.srcs) - 1)]
-        if len(img) > 2000:
-            img_data = img
-            # delete the header
-            base64_place = img_data.find('base64') + 7
-            header = img_data[:base64_place]
-            img_type = header[header.find('image/') + 6: header.find(';')]
-            img_name = "tmp." + img_type
-
-            img_data = img_data[base64_place:]
-            with open(img_name, "wb") as file:
-                img_data = img_data.encode('utf-8')
-                img_data = base64.decodebytes(img_data)
-                file.write(img_data)
-
-            picture = discord.File(img_name)
-            await channel.send(file=picture)              
-        elif len(img) != 0:
-            await channel.send(img)
-        else:
-            await self.get_image(channel)
+        img = self.image_names[random.randint(0, len(self.image_names) - 1)]
+        await channel.send(file=img)              
 
     async def clear(self, amount, channel):
         #make sure that the amount is valid
@@ -83,16 +63,37 @@ class message_handler:
             amount = 5
         await channel.purge(limit=amount)
 
-    async def search(self):
-        box = self.driver.find_element_by_xpath('//*[@id="REsRA"]')
-        box.clear()
-        box.send_keys(self.keywords)
-        box.send_keys(Keys.ENTER)
+    def clear_folder(self, folder):
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-        images = self.driver.find_elements_by_css_selector(".rg_i")
-        self.srcs = []
-        for image in images:
-            self.srcs.append(image.get_property("src"))
+
+    async def search(self):
+        #clear the current folder
+        folder = 'downloads'
+        self.clear_folder(folder)
+
+        #fill the folder with new images
+        self.arguments['keywords'] = self.keywords
+        self.response.download(self.arguments)
+
+        #store all the names to the files
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    self.image_names.append(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+        print(self.image_names)
 
     #searching the item on youtube
     def search_yt(self, item):
