@@ -50,7 +50,7 @@ class music_cog(commands.Cog):
             
             #try to connect to voice channel if you are not already connected
 
-            if self.vc == "" or not not self.vc.is_connected():
+            if self.vc == "" or not self.vc.is_connected():
                 self.vc = await self.music_queue[0][1].connect()
             else:
                 self.vc = await self.bot.move_to(self.music_queue[0][1])

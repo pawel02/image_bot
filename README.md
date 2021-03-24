@@ -1,7 +1,6 @@
 # Simple discord bot
 This bot has only 3 commands available
 
-
 ## General commands:
 - /help - displays all the available commands
 - /clear amount - will delete the past messages with the amount specified
@@ -15,9 +14,22 @@ This bot has only 3 commands available
 - /q - displays the current music queue
 - /skip - skips the current song being played
 
+# install with docker
+If you have docker then you can run the following command and it will automatically pull the image and then run it
 
-# Prerequisites
-For this bot to work you need to install selinium along with the chrome driver
+PLEASE DONT FORGET TO CREATE THE TOKEN.TXT FILE TO STORE YOUR TOKEN
+
+`
+docker pull pabolo02345/discord_bot
+`
+
+create token.txt and store you discord token there
+
+run 
+`
+docker run -d discord_bot
+`
+
 
 # bot.py
 Responsible for handling all the discord API stuff
