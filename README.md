@@ -16,20 +16,9 @@ This bot has only 3 commands available
 
 # install with docker
 If you have docker then you can run the following command and it will automatically pull the image and then run it
-
-PLEASE DONT FORGET TO CREATE THE TOKEN.TXT FILE TO STORE YOUR TOKEN
-
 `
-docker pull pabolo02345/discord_bot
+docker run -e TOKEN=your_token_here -d pabolo02345/discord_bot
 `
-
-create token.txt and store you discord token there
-
-run 
-`
-docker run -d discord_bot
-`
-
 
 # bot.py
 Responsible for handling all the discord API stuff

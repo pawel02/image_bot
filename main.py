@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+import os
+
 #import all of the cogs
 from main_cog import main_cog
 from image_cog import image_cog
@@ -17,8 +19,5 @@ bot.add_cog(image_cog(bot))
 bot.add_cog(music_cog(bot))
 
 #start the bot with our token
-token = ""
-with open("token.txt") as file:
-    token = file.read()
-bot.run(token)
+bot.run(os.getenv("TOKEN"))
 

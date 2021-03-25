@@ -63,7 +63,7 @@ class music_cog(commands.Cog):
         else:
             self.is_playing = False
 
-    @commands.command()
+    @commands.command(name="play", help="Plays a selected song from youtube")
     async def p(self, ctx, *args):
         query = " ".join(args)
         
@@ -82,7 +82,7 @@ class music_cog(commands.Cog):
                 if self.is_playing == False:
                     await self.play_music()
 
-    @commands.command()
+    @commands.command(name="queue", help="Displays the current songs in queue")
     async def q(self, ctx):
         retval = ""
         for i in range(0, len(self.music_queue)):
@@ -94,7 +94,7 @@ class music_cog(commands.Cog):
         else:
             await ctx.send("No music in queue")
 
-    @commands.command()
+    @commands.command(name="skip", help="Skips the current song being played")
     async def skip(self, ctx):
         if self.vc != "":
             self.vc.stop()

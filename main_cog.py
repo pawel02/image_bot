@@ -31,7 +31,7 @@ Music commands:
 
         await self.send_to_all(self.help_message)        
 
-    @commands.command()
+    @commands.command(name="help", help="Displays all the available commands")
     async def help(self, ctx):
         await ctx.send(self.help_message)
 
@@ -39,7 +39,7 @@ Music commands:
         for text_channel in self.text_channel_list:
             await text_channel.send(msg)
 
-    @commands.command()
+    @commands.command(name="clear", help="Clears a specified amount of messages")
     async def clear(self, ctx, arg):
         #extract the amount to clear
         amount = 5

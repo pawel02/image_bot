@@ -27,7 +27,7 @@ class image_cog(commands.Cog):
         self.update_images()
 
 
-    @commands.command()
+    @commands.command(name="get", help="Displays random image from the downloads")
     async def get(self, ctx):
         img = self.image_names[random.randint(0, len(self.image_names) - 1)]
         await ctx.send(file=discord.File(img))
@@ -48,7 +48,7 @@ class image_cog(commands.Cog):
         for filename in os.listdir(self.download_folder):
             self.image_names.append(os.path.join(self.download_folder, filename))
 
-    @commands.command()
+    @commands.command(name="search", help="searches for a message on google")
     async def search(self, ctx, *args):
         self.clear_folder()
 
