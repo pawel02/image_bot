@@ -50,10 +50,10 @@ class music_cog(commands.Cog):
             
             #try to connect to voice channel if you are not already connected
 
-            if self.vc == "" or not self.vc.is_connected():
+            if self.vc == "" or not self.vc.is_connected() or self.vc == None:
                 self.vc = await self.music_queue[0][1].connect()
             else:
-                self.vc = await self.bot.move_to(self.music_queue[0][1])
+                await self.vc.move_to(self.music_queue[0][1])
             
             print(self.music_queue)
             #remove the first element as you are currently playing it
@@ -96,7 +96,7 @@ class music_cog(commands.Cog):
 
     @commands.command(name="skip", help="Skips the current song being played")
     async def skip(self, ctx):
-        if self.vc != "":
+        if self.vc != "" and self.vc:
             self.vc.stop()
             #try to play next in the queue if it exists
             await self.play_music()
