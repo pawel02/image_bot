@@ -44,6 +44,7 @@ class image_cog(commands.Cog):
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
 
     def update_images(self):
+        self.image_names = []
         #store all the names to the files
         for filename in os.listdir(self.download_folder):
             self.image_names.append(os.path.join(self.download_folder, filename))
